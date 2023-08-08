@@ -14,7 +14,7 @@ y = np.array([0, 0, 5, 10, 15, 20, 25, 30, 35, 39, 41, 41, 43, 45, 45, 50, 55, 6
 count = np.array([])
 
 #insert location of folder where images reside. Now empty, since project is unfinished
-files = os.listdir(r"<folder name here>")
+files = os.listdir(r"<folder path here>")
 
 #Filtering only the files.
 files = [f for f in files if f.endswith("jpg")]
@@ -25,7 +25,7 @@ j = 1
 #looping of images from folder. JPG-image is open with Pillow, transformed to Numpy array, transforming values from RBG to HSV,
 # and eventually certain greens are counted together and stored in count-nparray
 for i in files:
-   img = np.array(Image.open(fr"<folder name here>\{i}"))
+   img = np.array(Image.open(fr"<folder path here>\{i}"))
    img_array = img.reshape(len(img)*len(img[0]),3)
    img_hsv = img_array/[255, 255, 255]
    img_hsv = colors.rgb_to_hsv(img_hsv)
