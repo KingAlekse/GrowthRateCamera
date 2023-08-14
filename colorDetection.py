@@ -1,3 +1,7 @@
+# this is just showcase for approximating amount of green hama beads from pictures in HamaHelmiKukka-folder.
+#
+#code will loop all pictures in given folder and draw with matplotlib curve with actual amount of green beads and approximated amount
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
