@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLabel, QFileDialog, QWidget, QTextBrowser, QSpinBox
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QPushButton, 
+                             QLabel, QFileDialog, QWidget, QTextBrowser, QSpinBox, QRadioButton)
 from PyQt5 import QtCore, uic
 from PyQt5.QtGui import QPixmap, QImage
 import sys
@@ -18,8 +19,6 @@ class UI(QMainWindow):
         self.tiedostoKentta = self.findChild(QTextBrowser, "tiedostoKentta")
         self.kuvaPolku = ""
 
-        self.lataa = self.findChild(QPushButton, "lataaKuvaNappi")
-        self.lataa.clicked.connect(self.lataaKuva)
         self.alkuKuva = self.findChild(QLabel, "alkuKuva")
 
         self.prosessoi = self.findChild(QPushButton, "prosessoiNappi")
@@ -35,34 +34,50 @@ class UI(QMainWindow):
         self.vLower = self.findChild(QSpinBox, "vLower")
         self.vUpper = self.findChild(QSpinBox, "vUpper")
 
-        #self.hLower.valueChanged.connect(self.prosessoiKuva)
-        #self.hUpper.valueChanged.connect(self.prosessoiKuva)
-        #self.sLower.valueChanged.connect(self.prosessoiKuva)
-        #self.sUpper.valueChanged.connect(self.prosessoiKuva)
-        #self.vLower.valueChanged.connect(self.prosessoiKuva)
-        #self.vUpper.valueChanged.connect(self.prosessoiKuva)
+        self.blackRadio = self.findChild(QRadioButton, "blackRadio")
+        self.blackRadio.setChecked(True)
+        
+        self.whiteRadio = self.findChild(QRadioButton, "whiteRadio")
+        
+        self.redRadio = self.findChild(QRadioButton, "redRadio")
+        
 
         self.show()
 
     def valitseKuva(self):
         kuva = QFileDialog.getOpenFileName(self, "Valitse kuva", "", "(*.jpg)")
         self.kuvaPolku = kuva[0]
-        print(str(self.kuvaPolku))
         self.tiedostoKentta.setText(str(kuva[0]))
-
-    def lataaKuva(self):
         self.pixmap1 = QPixmap(self.kuvaPolku)
-        
         self.alkuKuva.setPixmap(self.pixmap1)
 
     def prosessoiKuva(self):
         self.adjustValues()
-        img = np.array(Image.open(str(self.kuvaPolku)).rotate(90))
-        height, width, channel = img.shape
-        bytesPerLine = 3 * width
-        qImg = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
+        try:
+            img = np.array(Image.open(str(self.kuvaPolku)))
+            height, width, _ = img.shape
+            bytesPerLine = 3 * width
 
-        self.loppuKuva.setPixmap(QPixmap(qImg))
+            uusi = img.reshape(len(img)*len(img[0]), 3)
+            apuUusi = uusi/[255, 255, 255]
+            apuUusi = colors.rgb_to_hsv(apuUusi)
+            apuUusi = (apuUusi*[360, 100, 100]).astype(int)
+            c = (np.logical_and(apuUusi[:, 0] >= int(self.hLower.value()), apuUusi[:, 0] <= int(self.hUpper.value()))) & (np.logical_and(
+            apuUusi[:, 1] >= int(self.sLower.value()), apuUusi[:, 1] <= int(self.sUpper.value()))) & (np.logical_and(
+                apuUusi[:, 2] >= int(self.vLower.value()), apuUusi[:, 2] <= int(self.vUpper.value())))
+            
+            if self.redRadio.isChecked() == True:
+                uusi[c, :] = [255, 0, 0]
+            elif self.whiteRadio.isChecked() == True:
+                uusi[c, :] = [255, 255, 255]
+            else:
+                uusi[c, :] = [0, 0, 0]
+
+            qImg = QImage(uusi.data, width, height, bytesPerLine, QImage.Format_RGB888)
+            self.loppuKuva.setPixmap(QPixmap(qImg))
+        
+        except Exception as e:
+            self.loppuKuva.setText(str(e))
 
     def adjustValues(self):
         if self.hLower.value() > self.hUpper.value():
