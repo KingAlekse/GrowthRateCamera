@@ -1,3 +1,5 @@
+# note to myself: translate methods to english and add comments and etc
+
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QPushButton, 
                              QLabel, QFileDialog, QWidget, QTextBrowser, QSpinBox, QRadioButton)
 from PyQt5 import QtCore, uic
