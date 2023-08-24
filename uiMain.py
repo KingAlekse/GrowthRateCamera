@@ -66,19 +66,22 @@ class UI(QMainWindow):
 
         self.show()
 
+
+    #this deals with choosing folder for analysis
     def kansioPainettu(self):
         dir_name = QFileDialog.getExistingDirectory(self, "Valitse kansio")
         if dir_name:
             newpath = Path(dir_name)
             self.kansioKentta.setText(str(newpath))
             self.path = str(newpath)
-
+    
+    #this will handle mongodb connection. doesn't work currently, since i don't want share cluster id to anyone
     def DBPainettU(self):
         tunnus = self.tunnus.text()
         salasana = self.salasana.text()
 
         try:    
-            cluster = f"mongodb+srv://{tunnus}:{salasana}@cluster0.q0twyxy.mongodb.net/?retryWrites=true&w=majority"
+            cluster = f"mongodb+srv://{tunnus}:{salasana}    " #for security reason, cluster id is removed. need to add one, if one wants to connect mongodb
             self.client = MongoClient(cluster, server_api=ServerApi('1'))
             self.client.admin.command('ping')
             self.viesti.setText("Ok")
