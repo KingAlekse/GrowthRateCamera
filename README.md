@@ -1,9 +1,10 @@
 # GrowthRateCamera
 Thesis project
 
+Idea, theory and explanation for application will be explained later.
+
 Note to self: improve commenting and readability
 
-At the moment, only a skeleton version of application, which will run color detection from given pictures.
-Currently it can reasonably aproximate amount of green hama beads from given picture series.
+kuvaMain.py is a visual tool to see what areas of picture are affected when given hsv color range.
 
-Next step is to create gui for selecting folder/files and color search range.
+uiMain.py is gui to count green pixels in all jog-images in given folder. 
