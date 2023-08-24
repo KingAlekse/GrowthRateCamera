@@ -1,6 +1,8 @@
 # GrowthRateCamera
 Thesis project
 
+Note to self: improve commenting and readability
+
 At the moment, only a skeleton version of application, which will run color detection from given pictures.
 Currently it can reasonably aproximate amount of green hama beads from given picture series.
 
