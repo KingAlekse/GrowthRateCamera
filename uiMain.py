@@ -17,6 +17,9 @@ import numpy
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
+#this is unfinished tool for personal science project.
+#need to improve commenting and naming methods
+#also I should stick with camelCase and not change casing once in a while....
 
 class UI(QMainWindow):
     progressChanged = QtCore.pyqtSignal(int)
@@ -75,13 +78,13 @@ class UI(QMainWindow):
             self.kansioKentta.setText(str(newpath))
             self.path = str(newpath)
     
-    #this will handle mongodb connection. doesn't work currently, since i don't want share cluster id to anyone
+    #checks if connection to mongodb works and if not, doesn't allow next section to try saving to cloud.
     def DBPainettU(self):
         tunnus = self.tunnus.text()
         salasana = self.salasana.text()
 
         try:    
-            cluster = f"mongodb+srv://{tunnus}:{salasana}    " #for security reason, cluster id is removed. need to add one, if one wants to connect mongodb
+            cluster = f"mongodb+srv://{tunnus}:{salasana}@cluster0.q0twyxy.mongodb.net/?retryWrites=true&w=majority"
             self.client = MongoClient(cluster, server_api=ServerApi('1'))
             self.client.admin.command('ping')
             self.viesti.setText("Ok")
@@ -94,6 +97,7 @@ class UI(QMainWindow):
             self.pilviCheck.setCheckable(False)
             self.yhteysOK = False
 
+    #will safe data to mongodb database, if mongodb connection works
     def tallenna(self):
         if self.pilviCheck.isChecked() and self.yhteysOK == True and type(self.data)== numpy.ndarray:
             db = self.client.GrowthRateCamera
