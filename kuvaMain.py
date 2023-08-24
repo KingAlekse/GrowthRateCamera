@@ -53,6 +53,9 @@ class UI(QMainWindow):
         self.pixmap1 = QPixmap(self.kuvaPolku)
         self.alkuKuva.setPixmap(self.pixmap1)
 
+
+    #this turns image to numpy array, turns rgb values to hsv and then counts pixels in given range
+    #rgb to hsv transformation may actually be unnecessary...
     def prosessoiKuva(self):
         self.adjustValues()
         try:
